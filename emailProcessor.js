@@ -1,3 +1,7 @@
+const dotenv = require('dotenv');
+
+dotenv.config({ path: './.env' });
+
 const API_KEY = process.env.MAILGUN_API_KEY;
 const DOMAIN = process.env.MAILGUN_DOMAIN;
 

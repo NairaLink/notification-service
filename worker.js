@@ -1,6 +1,9 @@
+const dotenv = require('dotenv');
 const { Worker } = require('bullmq');
 const SendMail = require('./emailProcessor');
 const PhoneMail = require('./phoneProcessor');
+
+dotenv.config({ path: '.env' });
 
 const worker = new Worker(
   'notification',
@@ -17,13 +20,13 @@ const worker = new Worker(
     }
   },
   {
-    connection: { host: process.env.HOST, port: process.env.PORT },
+    connection: { host: process.env.REDIS_HOST, port: process.env.REDIS_PORT },
     concurrency: parseInt(process.env.CONCURRENCY, 10),
     removeOnComplete: { count: 0 },
     removeOnFail: { count: 0 },
   }
 );
-
+console.log(process.env.REDIS_HOST);
 console.info('Worker listening for mail jobs');
 
 module.exports = worker;

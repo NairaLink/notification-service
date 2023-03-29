@@ -4,13 +4,26 @@ const handlebars = require('handlebars');
 const fs = require('fs');
 const path = require('path');
 const maskedCardNumber = require('./helpers/maskedCardNumber');
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
+const swaggerDocument = YAML.load('./swagger.yaml');
+const dotenv = require('dotenv');
 
-const app = express();
-app.use(express.json());
+dotenv.config({ path: './.env' });
 
 const queue = new Queue('notification', {
-  connection: { host: process.env.HOST, port: process.env.PORT },
+  connection: { host: process.env.REDIS_HOST, port: process.env.REDIS_PORT },
 });
+
+const app = express();
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+app.use(express.json());
+
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
 
 app.post('/api/v1/notifications', async (req, res) => {
   const source = fs.readFileSync(
@@ -36,6 +49,6 @@ app.post('/api/v1/notifications', async (req, res) => {
     .json({ message: 'Received and processing email notification' });
 });
 
-app.listen(6000, () => {
-  console.log('Notification listening on port 6000');
+app.listen(port = process.env.PORT, () => {
+  console.log(`Notification listening on port ${process.env.PORT}`);
 });
