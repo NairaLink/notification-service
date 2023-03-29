@@ -1,2 +1,2 @@
-localhost
+redis-db
 Worker listening for mail jobs

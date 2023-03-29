@@ -34,28 +34,28 @@ paths:
         '201':
           description: Created
 
-  /notification:
-    post:
-      summary: Send phone notification.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                from:
-                  type: string
-                  example: Nairalink <support@cloudmendy.tech>
-                to:
-                  type: string
-                  example: customeremail@email.com
-                subject:
-                  type: string
-                  example: Card creation
-                html:
-                  type: string
-                  example: Your Nairalink card has been successfully created
-      responses:
-        '201':
-          description: Created
+  # /notification:
+  #   post:
+  #     summary: Send phone notification.
+  #     requestBody:
+  #       required: true
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             properties:
+  #               from:
+  #                 type: string
+  #                 example: Nairalink <support@cloudmendy.tech>
+  #               to:
+  #                 type: string
+  #                 example: customeremail@email.com
+  #               subject:
+  #                 type: string
+  #                 example: Card creation
+  #               html:
+  #                 type: string
+  #                 example: Your Nairalink card has been successfully created
+  #     responses:
+  #       '201':
+  #         description: Created

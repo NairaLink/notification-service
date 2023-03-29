@@ -1,4 +1,8 @@
+const path = require('path');
+const dotenv = require('dotenv');
 const Queue = require('bullmq').Queue;
+
+dotenv.config({ path: '../.env' });
 
 class NotificationClient {
   constructor(type, opts) {
@@ -16,5 +20,5 @@ class NotificationClient {
 }
 
 module.exports = new NotificationClient('notification', {
-  connection: { host: 'localhost', port: 6379 },
+  connection: { host: process.env.REDIS_HOST, port: process.env.REDIS_PORT },
 });
