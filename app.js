@@ -4,9 +4,6 @@ const handlebars = require('handlebars');
 const fs = require('fs');
 const path = require('path');
 const maskedCardNumber = require('./helpers/maskedCardNumber');
-const swaggerUi = require('swagger-ui-express');
-const YAML = require('yamljs');
-const swaggerDocument = YAML.load('./swagger.yaml');
 const dotenv = require('dotenv');
 
 dotenv.config({ path: './.env' });
@@ -16,8 +13,6 @@ const queue = new Queue('notification', {
 });
 
 const app = express();
-
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(express.json());
 
