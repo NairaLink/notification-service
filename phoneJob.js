@@ -7,9 +7,9 @@ const queue = new Queue('notification', {
 });
 
 const job = {
-  'from' : process.env.TWILIO_PHONE_NO,
-  'to' : '+2347061755048',
-  'body' : 'Debit alert:-\nYou have been debited the sum of - #5000\nThank you for choosing Nairalink'
+  from: process.env.TWILIO_PHONE_NO,
+  to: '+2347061755048',
+  body: 'Debit alert:-\nYou have been debited the sum of - #5000\nThank you for choosing Nairalink',
 };
 
 (async () => {

@@ -1,49 +1,24 @@
 const express = require('express');
-const { Queue } = require('bullmq');
-const handlebars = require('handlebars');
+const router = require('./index');
+const swaggerUi = require('swagger-ui-express');
 const fs = require('fs');
-const path = require('path');
-const maskedCardNumber = require('./helpers/maskedCardNumber');
-const dotenv = require('dotenv');
-
-dotenv.config({ path: './.env' });
-
-const queue = new Queue('notification', {
-  connection: { host: process.env.REDIS_HOST, port: process.env.REDIS_PORT },
-});
+const YAML = require('yaml');
 
 const app = express();
 
+const file = fs.readFileSync('./swagger.yaml', 'utf8');
+const swaggerDocument = YAML.parse(file);
+
 app.use(express.json());
+app.use(router);
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.post('/api/v1/notifications', async (req, res) => {
-  const source = fs.readFileSync(
-    path.join(__dirname, 'helpers/templates/notification.handlebars'),
-    'utf8'
-  );
-  const compiledTemplate = handlebars.compile(source);
-  const payload = { ...req.body };
-  payload.firstName = payload.card_name.split(' ')[0];
-  payload.card_number = maskedCardNumber(payload.card_number);
-
-  const job = {
-    from: 'Nairalink <support@cloudmendy.tech>',
-    subject: 'Card creation',
-    to: req.body.email,
-    html: compiledTemplate(payload),
-  };
-  await queue.add('email-message', job);
-  console.info(`Enqueued an email sending to ${job.to}`);
-
-  return res
-    .status(200)
-    .json({ message: 'Received and processing email notification' });
+app.get('/status', (req, res) => {
+  res.status(200).json({ msg: 'Everything is cool!' });
 });
 
-app.listen(port = process.env.PORT, () => {
-  console.log(`Notification listening on port ${process.env.PORT}`);
+const port = process.env.PORT || 5500;
+app.listen(port, () => {
+  console.log('Notification listening on port ', port);
 });
